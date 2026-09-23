@@ -1,26 +1,26 @@
-all: bin/client_static
+all: bin/client_dynamic
 
-bin/client_static: obj/main.o lib/libmyutils.a
+bin/client_dynamic: obj/main_dynamic.o lib/libmyutils.so
 	mkdir -p bin
-	gcc obj/main.o -Llib -lmyutils -o bin/client_static
+	gcc obj/main_dynamic.o -Llib -lmyutils -o bin/client_dynamic
 
-lib/libmyutils.a: obj/mystrfunctions.o obj/myfilefunctions.o
+lib/libmyutils.so: obj/mystrfunctions_pic.o obj/myfilefunctions_pic.o
 	mkdir -p lib
-	ar rcs lib/libmyutils.a obj/mystrfunctions.o obj/myfilefunctions.o
+	gcc -shared obj/mystrfunctions_pic.o obj/myfilefunctions_pic.o -o lib/libmyutils.so
 
-obj/mystrfunctions.o: src/mystrfunctions.c include/mystrfunctions.h
+obj/mystrfunctions_pic.o: src/mystrfunctions.c include/mystrfunctions.h
 	mkdir -p obj
-	gcc -c -Iinclude src/mystrfunctions.c -o obj/mystrfunctions.o
+	gcc -c -fPIC -Iinclude src/mystrfunctions.c -o obj/mystrfunctions_pic.o
 
-obj/myfilefunctions.o: src/myfilefunctions.c include/myfilefunctions.h
+obj/myfilefunctions_pic.o: src/myfilefunctions.c include/myfilefunctions.h
 	mkdir -p obj
-	gcc -c -Iinclude src/myfilefunctions.c -o obj/myfilefunctions.o
+	gcc -c -fPIC -Iinclude src/myfilefunctions.c -o obj/myfilefunctions_pic.o
 
-obj/main.o: src/main.c include/mystrfunctions.h include/myfilefunctions.h
+obj/main_dynamic.o: src/main.c include/mystrfunctions.h include/myfilefunctions.h
 	mkdir -p obj
-	gcc -c -Iinclude src/main.c -o obj/main.o
+	gcc -c -Iinclude src/main.c -o obj/main_dynamic.o
 
 clean:
-	rm -rf obj/*.o lib/*.a bin/client_static
+	rm -rf obj/*.o lib/*.so bin/client_dynamic
 
 .PHONY: all clean
