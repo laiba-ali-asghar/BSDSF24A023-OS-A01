@@ -1,8 +1,12 @@
-all: bin/client
+all: bin/client_static
 
-bin/client: obj/mystrfunctions.o obj/myfilefunctions.o obj/main.o
+bin/client_static: obj/main.o lib/libmyutils.a
 	mkdir -p bin
-	gcc obj/mystrfunctions.o obj/myfilefunctions.o obj/main.o -o bin/client
+	gcc obj/main.o -Llib -lmyutils -o bin/client_static
+
+lib/libmyutils.a: obj/mystrfunctions.o obj/myfilefunctions.o
+	mkdir -p lib
+	ar rcs lib/libmyutils.a obj/mystrfunctions.o obj/myfilefunctions.o
 
 obj/mystrfunctions.o: src/mystrfunctions.c include/mystrfunctions.h
 	mkdir -p obj
@@ -17,6 +21,6 @@ obj/main.o: src/main.c include/mystrfunctions.h include/myfilefunctions.h
 	gcc -c -Iinclude src/main.c -o obj/main.o
 
 clean:
-	rm -rf obj/*.o bin/client
+	rm -rf obj/*.o lib/*.a bin/client_static
 
 .PHONY: all clean
