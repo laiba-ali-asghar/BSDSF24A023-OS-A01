@@ -1,0 +1,27 @@
+.TH MYSTRFUNCTIONS 3 "September 2026" "Version 1.0" "My Utilities Library Manual"
+.SH NAME
+mystrlen, mystrcpy, mystrncpy, mystrcat \- custom string manipulation utilities
+.SH SYNOPSIS
+.B #include "mystrfunctions.h"
+.sp
+.BI "int mystrlen(const char *" s ");"
+.br
+.BI "int mystrcpy(char *" dest ", const char *" src ");"
+.br
+.BI "int mystrncpy(char *" dest ", const char *" src ", int " n ");"
+.br
+.BI "int mystrcat(char *" dest ", const char *" src ");"
+.SH DESCRIPTION
+.B mystrlen\(\)
+calculates the length of the string pointed to by s.
+.PP
+.B mystrcpy\(\)
+copies the string pointed to by src to dest.
+.PP
+.B mystrncpy\(\)
+copies at most n bytes from src to dest.
+.PP
+.B mystrcat\(\)
+appends the src string to the dest string.
+.SH AUTHOR
+Laiba Ali Asghar

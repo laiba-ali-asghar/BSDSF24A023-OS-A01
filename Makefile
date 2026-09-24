@@ -1,3 +1,7 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -Iinclude
+PREFIX = /usr/local
+
 all: bin/client_dynamic
 
 bin/client_dynamic: obj/main_dynamic.o lib/libmyutils.so
@@ -20,7 +24,16 @@ obj/main_dynamic.o: src/main.c include/mystrfunctions.h include/myfilefunctions.
 	mkdir -p obj
 	gcc -c -Iinclude src/main.c -o obj/main_dynamic.o
 
+install: bin/client_dynamic
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/share/man/man3
+	mkdir -p $(PREFIX)/lib
+	cp bin/client_dynamic $(PREFIX)/bin/client
+	cp lib/libmyutils.so $(PREFIX)/lib/
+	cp man/man3/*.3 $(PREFIX)/share/man/man3/
+	ldconfig
+
 clean:
 	rm -rf obj/*.o lib/*.so bin/client_dynamic
 
-.PHONY: all clean
+.PHONY: all install clean
